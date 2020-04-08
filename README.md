@@ -2,6 +2,10 @@
 
 This repository stores a code practice for EAFIT University where we need to find the most efficient way to get a schedule for classes such that students walk the shortest possible path to arrive to another class using an algorithm.
 
+## Problem statement
+
+You can see the complete description in the `EDA2 Final Project 20201.pdf` file inside this repository.
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
