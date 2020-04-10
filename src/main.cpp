@@ -1,11 +1,14 @@
 #include "libraries.h"
 #include "Aula.h"
+#include "Estudiante.h"
+#include "Matricula.h"
+#include "Distancia.h"
 
 using namespace std;
 
 template <class T>
 vector<T> separateDataset(string filename) {
-  ifstream file(filename);
+  ifstream file("./bin/datasets/" + filename);
   string line;
   vector<T> data;
   
@@ -21,24 +24,26 @@ vector<T> separateDataset(string filename) {
       catch(const char* exp) {
         cout << "[" << lineCounter << "]:" << exp << endl;
       }
-      //cout << data[data.size() - 1] << endl;
     }
-    cout << "Archivo casi cerrado" << endl;
     file.close();
-    cout << "Archivo cerrado" << endl;
   }
-  else {
-    cout << "Error de lectura" << endl;
-  }
+  else cout << "Error de lectura: " << filename << endl;
   return data;
 }
 
 int main() {
-  //Aula a("7108,Aula de clase,28,1");
-  vector<Aula> aulaDataset = separateDataset<Aula>("./src/datasets/aulas.csv");
-  cout << "Programa" << endl;
-  cout << aulaDataset.size() << endl;
-  cout << aulaDataset[1] << endl;
+  //vector<Aula> aulaDataset = separateDataset<Aula>("aulas.csv");
+  //cout << aulaDataset.size() << endl;
+  //cout << aulaDataset[1] << endl;
   
+  //vector<Estudiante> estudianteDataset = separateDataset<Estudiante>("estudiantes.csv");
+  //cout << estudianteDataset.size() << endl;
+  //cout << estudianteDataset[1] << endl;
+
+  //vector<Matricula> matriculaDataset = separateDataset<Matricula>("mat20192.csv");
+
+  vector<Distancia> distanciaDataset = separateDataset<Distancia>("DistanciasBloques.csv");
+  cout << distanciaDataset.size() << endl;
+  cout << distanciaDataset[1] << endl;
   return 0;
 }

@@ -20,4 +20,4 @@ $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
 
 clean:
 	@echo "🧹 Clearing..."
-	-rm $(BIN)/*
+	-rm $(BIN)/*.exe
