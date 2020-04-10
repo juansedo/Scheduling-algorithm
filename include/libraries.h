@@ -1,10 +1,7 @@
-#ifndef LIBRARIES_H
-#define LIBRARIES_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <vector>
-
-#endif

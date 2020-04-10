@@ -1,5 +1,4 @@
-#ifndef AULA_H
-#define AULA_H
+#pragma once
 
 class Aula {
 private:
@@ -14,6 +13,3 @@ public:
     operator const char* ();
     virtual ~Aula();
 };
-
-
-#endif /* AULA_H */
