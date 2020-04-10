@@ -8,12 +8,20 @@ vector<T> separateDataset(string filename) {
   ifstream file(filename);
   string line;
   vector<T> data;
+  
   if (file.is_open()) {
+    int lineCounter = 1;
     while (getline(file, line)) {
-      cout << line << endl;
-      T t(line);
-      data.push_back(t);
-      cout << data[data.size() - 1] << endl;
+      try {
+        T t(line);
+        data.push_back(t);
+        lineCounter++;
+        cout << t << endl;
+      }
+      catch(const char* exp) {
+        cout << "[" << lineCounter << "]:" << exp << endl;
+      }
+      //cout << data[data.size() - 1] << endl;
     }
     cout << "Archivo casi cerrado" << endl;
     file.close();
