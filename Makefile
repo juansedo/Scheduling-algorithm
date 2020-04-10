@@ -1,15 +1,23 @@
-objects := main.o
-cpp := $(objects:%.o=%.cpp)
+CXX       := g++
+CXX_FLAGS := -Wall -Wextra -std=c++17
 
-EXE := main
+BIN     := bin
+SRC     := src
+INCLUDE := include
+LIB     := lib
+LIBRARIES   := 
+EXECUTABLE  := main
 
-all: $(EXE)
+all: $(BIN)/$(EXECUTABLE)
 
-$(EXE): $(objects)
-		g++ $(objects) -o $(EXE)
+run: clean all
+	@echo "🚀 Executing..."
+	./$(BIN)/$(EXECUTABLE)
 
-$(objects): $(cpp)
-		g++ -c $(cpp)
+$(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
+	@echo "🚧 Building..."
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES)
 
 clean:
-		rm -rf *.o
+	@echo "🧹 Clearing..."
+	-rm $(BIN)/*
