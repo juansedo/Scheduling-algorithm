@@ -33,6 +33,7 @@ string substring(string input, int init_pos, int end_pos) {
     return input.substr(init_pos, end_pos - init_pos);
 }
 
+//Returns into arr all the substrings in input, separated according posComs positions
 void applySubstrings(vector<int> posComs, string input, string* arr, int arr_length) {
     posComs.push_back(input.length() - 1);
     *(arr) = substring(input, 0, posComs[0]);

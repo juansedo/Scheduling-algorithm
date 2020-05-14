@@ -19,7 +19,6 @@ vector<T> separateDataset(string filename) {
         T t(line);
         data.push_back(t);
         lineCounter++;
-        cout << t << endl;
       }
       catch(const char* exp) {
         cout << "[" << lineCounter << "]:" << exp << endl;

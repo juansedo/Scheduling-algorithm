@@ -1,97 +1,93 @@
-1302A,Sala de reuniones Centro de Idiomas,16,1
-1302B,Sala de reuniones Centro de Idiomas,16,1
-1402,Cocina pedagógica Centro de Idiomas,14,1
-1403,Sala de manualidades Centro de Idiomas,14,1
-1404,Sala de computo Centro de Idiomas,20,1
-1405,Sala de computo Centro de Idiomas,20,1
-1407,Sala de clasificaciones y tutorías Centro de Idiomas,2,1
-1408,Sala de clasificaciones y tutorías Centro de Idiomas,2,1
-1409,Sala de clasificaciones y tutorías Centro de Idiomas,2,1
-1410,Sala de clasificaciones y tutorías Centro de Idiomas,2,1
-1411,Sala de clasificaciones y tutorías Centro de Idiomas,2,1
-1601,Aula de clase Centro de Idiomas,14,1
-1602,Aula de clase Centro de Idiomas,14,1
-1603,Aula de clase Centro de Idiomas,14,1
-1604,Aula de clase Centro de Idiomas,14,1
-1605,Aula de clase Centro de Idiomas,15,1
-1606,Aula de clase Centro de Idiomas,13,1
-1607,Aula de clase Centro de Idiomas,14,1
-1608,Aula de clase Centro de Idiomas,13,1
-1609,Aula de clase Centro de Idiomas,13,1
-1610,Aula de clase Centro de Idiomas,13,1
-1611,Aula de clase Centro de Idiomas,13,1
-1612 A Testing Center,Aula de clase Centro de Idiomas,20,1
-1612 B Testing Center,Aula de clase Centro de Idiomas,10,1
-1612 C Testing Center,Aula de clase Centro de Idiomas,27,1
-1613,Aula de clase Centro de Idiomas,13,1
-1614,Aula de clase Centro de Idiomas,13,1
-1615,Aula de clase Centro de Idiomas,13,1
-1701,Aula de clase Centro de Idiomas,14,1
-1702,Aula de clase Centro de Idiomas,13,1
-1703,Aula de clase Centro de Idiomas,14,1
-1704,Aula de clase Centro de Idiomas,13,1
-1705,Aula de clase Centro de Idiomas,15,1
-1706,Aula de clase Centro de Idiomas,14,1
-1707,Aula de clase Centro de Idiomas,12,1
-1708,Aula de clase Centro de Idiomas,14,1
-1709,Aula de clase Centro de Idiomas,13,1
-1710,Aula de clase Centro de Idiomas,13,1
-1711,Aula de clase Centro de Idiomas,13,1
-1712,Aula de clase Centro de Idiomas,13,1
-1713,Aula de clase Centro de Idiomas,13,1
-1714,Aula de clase Centro de Idiomas,14,1
-1715,Aula de clase Centro de Idiomas,14,1
-1716,Aula de clase Centro de Idiomas,13,1
-1717,Aula de clase Centro de Idiomas,13,1
-1718,Aula de clase Centro de Idiomas,13,1
-1719,Aula de clase Centro de Idiomas,13,1
-1720,Aula de clase Centro de Idiomas,13,1
-1721,Aula de clase Centro de Idiomas,14,1
-1801,Aula de clase Centro de Idiomas,14,1
-1802,Aula de clase Centro de Idiomas,13,1
-1803,Aula de clase Centro de Idiomas,14,1
-1804,Aula de clase Centro de Idiomas,13,1
-1805,Aula de clase Centro de Idiomas,15,1
-1806,Aula de clase Centro de Idiomas,14,1
-1807,Aula de clase Centro de Idiomas,12,1
-1808,Aula de clase Centro de Idiomas,14,1
-1809,Aula de clase Centro de Idiomas,13,1
-1810,Aula de clase Centro de Idiomas,13,1
-1811,Aula de clase Centro de Idiomas,13,1
-1812,Aula de clase Centro de Idiomas,13,1
-1813,Aula de clase Centro de Idiomas,13,1
-1814,Aula de clase Centro de Idiomas,14,1
-1815,Aula de clase Centro de Idiomas,14,1
-1816,Aula de clase Centro de Idiomas,13,1
-1817,Aula de clase Centro de Idiomas,13,1
-1818,Aula de clase Centro de Idiomas,13,1
-1819,Aula de clase Centro de Idiomas,13,1
-1820,Aula de clase Centro de Idiomas,13,1
-1821,Aula de clase Centro de Idiomas,14,1
-1901,Cabina de clasificaciones Centro de Idiomas,2,1
-1902,Cabina de clasificaciones Centro de Idiomas,2,1
-1903,Cabina de clasificaciones Centro de Idiomas,2,1
-1904,Aula de clase Centro de Idiomas,9,1
-1905,Aula de clase Centro de Idiomas,9,1
-1906,Aula de clase Centro de Idiomas,9,1
-1907,Aula de clase Centro de Idiomas,12,1
-1908,Aula de clase Centro de Idiomas,12,1
-1909,Aula de clase Centro de Idiomas,12,1
-1910,Aula de clase Centro de Idiomas,12,1
-1911,Aula de clase Centro de Idiomas,8,1
-1912,Aula de clase Centro de Idiomas,8,1
-1914,Aula de clase Centro de Idiomas,8,1
-1915,Aula de clase Centro de Idiomas,8,1
-1916,Aula de clase Centro de Idiomas,8,1
-1917,Aula de clase Centro de Idiomas,8,1
-1918,Aula de clase Centro de Idiomas,8,1
-1919,Aula de clase Centro de Idiomas,8,1
-1920,Aula de clase Centro de Idiomas,8,1
-1921,Aula de clase Centro de Idiomas,8,1
-1922,Aula de clase,30,1
-1923,Aula de clase,30,1
-1924,Aula de clase,30,1
-1925,Aula de clase,30,1
+01402,Cocina pedagógica Centro de Idiomas,14,1
+01403,Sala de manualidades Centro de Idiomas,14,1
+01404,Sala de computo Centro de Idiomas,20,1
+01405,Sala de computo Centro de Idiomas,20,1
+01407,Sala de clasificaciones y tutorías Centro de Idiomas,2,1
+01408,Sala de clasificaciones y tutorías Centro de Idiomas,2,1
+01409,Sala de clasificaciones y tutorías Centro de Idiomas,2,1
+01410,Sala de clasificaciones y tutorías Centro de Idiomas,2,1
+01402,Sala de clasificaciones y tutorías Centro de Idiomas,2,1
+01601,Aula de clase Centro de Idiomas,14,1
+01602,Aula de clase Centro de Idiomas,14,1
+01603,Aula de clase Centro de Idiomas,14,1
+01604,Aula de clase Centro de Idiomas,14,1
+01605,Aula de clase Centro de Idiomas,15,1
+01606,Aula de clase Centro de Idiomas,13,1
+01607,Aula de clase Centro de Idiomas,14,1
+01608,Aula de clase Centro de Idiomas,13,1
+01609,Aula de clase Centro de Idiomas,13,1
+01610,Aula de clase Centro de Idiomas,13,1
+01402,Aula de clase Centro de Idiomas,13,1
+01612,Aula de clase Centro de Idiomas,20,1
+01613,Aula de clase Centro de Idiomas,13,1
+01614,Aula de clase Centro de Idiomas,13,1
+01615,Aula de clase Centro de Idiomas,13,1
+01701,Aula de clase Centro de Idiomas,14,1
+01702,Aula de clase Centro de Idiomas,13,1
+01703,Aula de clase Centro de Idiomas,14,1
+01704,Aula de clase Centro de Idiomas,13,1
+01705,Aula de clase Centro de Idiomas,15,1
+01706,Aula de clase Centro de Idiomas,14,1
+01707,Aula de clase Centro de Idiomas,12,1
+01708,Aula de clase Centro de Idiomas,14,1
+01709,Aula de clase Centro de Idiomas,13,1
+01710,Aula de clase Centro de Idiomas,13,1
+01711,Aula de clase Centro de Idiomas,13,1
+01712,Aula de clase Centro de Idiomas,13,1
+01713,Aula de clase Centro de Idiomas,13,1
+01714,Aula de clase Centro de Idiomas,14,1
+01715,Aula de clase Centro de Idiomas,14,1
+01716,Aula de clase Centro de Idiomas,13,1
+01717,Aula de clase Centro de Idiomas,13,1
+01718,Aula de clase Centro de Idiomas,13,1
+01719,Aula de clase Centro de Idiomas,13,1
+01720,Aula de clase Centro de Idiomas,13,1
+01721,Aula de clase Centro de Idiomas,14,1
+01801,Aula de clase Centro de Idiomas,14,1
+01802,Aula de clase Centro de Idiomas,13,1
+01803,Aula de clase Centro de Idiomas,14,1
+01804,Aula de clase Centro de Idiomas,13,1
+01805,Aula de clase Centro de Idiomas,15,1
+01806,Aula de clase Centro de Idiomas,14,1
+01807,Aula de clase Centro de Idiomas,12,1
+01808,Aula de clase Centro de Idiomas,14,1
+01809,Aula de clase Centro de Idiomas,13,1
+01810,Aula de clase Centro de Idiomas,13,1
+01811,Aula de clase Centro de Idiomas,13,1
+01812,Aula de clase Centro de Idiomas,13,1
+01813,Aula de clase Centro de Idiomas,13,1
+01814,Aula de clase Centro de Idiomas,14,1
+01815,Aula de clase Centro de Idiomas,14,1
+01816,Aula de clase Centro de Idiomas,13,1
+01817,Aula de clase Centro de Idiomas,13,1
+01818,Aula de clase Centro de Idiomas,13,1
+01819,Aula de clase Centro de Idiomas,13,1
+01820,Aula de clase Centro de Idiomas,13,1
+01821,Aula de clase Centro de Idiomas,14,1
+01901,Cabina de clasificaciones Centro de Idiomas,2,1
+01902,Cabina de clasificaciones Centro de Idiomas,2,1
+01903,Cabina de clasificaciones Centro de Idiomas,2,1
+01904,Aula de clase Centro de Idiomas,9,1
+01905,Aula de clase Centro de Idiomas,9,1
+01906,Aula de clase Centro de Idiomas,9,1
+01907,Aula de clase Centro de Idiomas,12,1
+01908,Aula de clase Centro de Idiomas,12,1
+01909,Aula de clase Centro de Idiomas,12,1
+01910,Aula de clase Centro de Idiomas,12,1
+01911,Aula de clase Centro de Idiomas,8,1
+01912,Aula de clase Centro de Idiomas,8,1
+01914,Aula de clase Centro de Idiomas,8,1
+01915,Aula de clase Centro de Idiomas,8,1
+01916,Aula de clase Centro de Idiomas,8,1
+01917,Aula de clase Centro de Idiomas,8,1
+01918,Aula de clase Centro de Idiomas,8,1
+01919,Aula de clase Centro de Idiomas,8,1
+01920,Aula de clase Centro de Idiomas,8,1
+01921,Aula de clase Centro de Idiomas,8,1
+01922,Aula de clase,30,1
+01923,Aula de clase,30,1
+01924,Aula de clase,30,1
+01925,Aula de clase,30,1
 12101,Aula de clase,10,1
 12201,Aula de clase,16,0
 12202,Aula de clase,10,0
@@ -262,8 +258,8 @@
 29406,Sala de reuniones,8,1
 29504,Sala de reuniones,8,1
 29521,Aula de clase Desarrollo estudiantil,15,1
-3124,Sala de reuniones,2,1
-3304,Sala de reuniones,8,0
+03124,Sala de reuniones,2,1
+03304,Sala de reuniones,8,0
 30103,Cubiculo de musica con instrumento,1,1
 30104,Cubiculo de musica con instrumento,1,1
 30105,Cubiculo de musica con instrumento,1,1
@@ -375,11 +371,11 @@
 38320,Sala de computo,30,1
 38321,Sala de computo,30,1
 38405,Aula Humanidades,26,1
-7101,Aula de clase,28,1
-7102,Aula de clase,28,1
-7103,Aula de clase,28,1
-7104,Aula de clase,28,1
-7105,Aula de clase,28,1
-7106,Aula de clase,28,1
-7107,Aula de clase,28,1
-7108,Aula de clase,28,1
+07101,Aula de clase,28,1
+07102,Aula de clase,28,1
+07103,Aula de clase,28,1
+07104,Aula de clase,28,1
+07105,Aula de clase,28,1
+07106,Aula de clase,28,1
+07107,Aula de clase,28,1
+07108,Aula de clase,28,1

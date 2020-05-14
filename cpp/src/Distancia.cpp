@@ -8,7 +8,7 @@ Distancia::Distancia(string input) {
     vector<int> posComs = getCommasPosition(input);
     
     if (posComs.size() != 2) throw "CSVFormatException, commas number is different than expected";
-
+    
     string str_attributes[3]; 
     applySubstrings(posComs, input, str_attributes, sizeof(str_attributes)/sizeof(*str_attributes));
 
