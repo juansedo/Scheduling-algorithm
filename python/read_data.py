@@ -1,6 +1,7 @@
 import csv
 import inits
 from pathlib import Path
+import graphs
 
 def clasesById(clases, class_id, group):
   set_class = set([])
@@ -25,3 +26,5 @@ with open(path, encoding="utf8") as csv_file:
       reg +=1
     line_count += 1
   print(f'Processed {line_count} lines ({reg} registered).')
+
+#graphs.createGraph(estudiantes)
