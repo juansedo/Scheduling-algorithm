@@ -20,7 +20,7 @@ class Aula:
     self.tipo = line[1]
     self.capacidad = line[2]
     self.accesible = line[3] == "1"
-  
+
   def __str__(self):
     return self.id + ", " + self.tipo + "\n"
 
@@ -29,7 +29,7 @@ class Estudiante:
     self.code = line[0]
     self.inpairment = line[1] == "1"
     self.days = {'L' : [], 'M' : [], 'W' : [], 'J' : [], 'V' : [], 'S' : [], 'D' : []}
-  
+
   def addClass(self, classrooms):
     for cl in classrooms:
       switcher = {"lunes": 'L', "martes": 'M',
