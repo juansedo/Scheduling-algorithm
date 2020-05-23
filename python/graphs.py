@@ -4,13 +4,17 @@ def createGraph(estudiantes):
         for day in estudiante.days.keys():
             for clase_desde in estudiante.days[day]:
                 for clase_hasta in estudiante.days[day]:
-                    if clase_desde.end_time == clase_hasta.start_time:
+                    if clase_desde.end_time == clase_hasta.start_time and clase_hasta.code+"."+str(clase_hasta.group) != clase_desde.code+"."+str(clase_desde.group):
                         try:
                             try:
-                                graph[day][clase_hasta.code+str(clase_hasta.group)][clase_desde.code+str(clase_desde.group)] += 1
+                                graph[day][clase_hasta.code+"."+str(clase_hasta.group)][clase_desde.code+"."+str(clase_desde.group)] += 1
                             except:
-                                graph[day][clase_hasta.code+str(clase_hasta.group)][clase_desde.code+str(clase_desde.group)] = 1
+                                graph[day][clase_hasta.code+"."+str(clase_hasta.group)][clase_desde.code+"."+str(clase_desde.group)] = 1
                         except:
-                            graph[day][clase_hasta.code+str(clase_hasta.group)] = {}
-                            graph[day][clase_hasta.code+str(clase_hasta.group)][clase_desde.code+str(clase_desde.group)] = 1
-    print(graph)
+                            graph[day][clase_hasta.code+"."+str(clase_hasta.group)] = {}
+                            graph[day][clase_hasta.code+"."+str(clase_hasta.group)][clase_desde.code+"."+str(clase_desde.group)] = 1
+    for i in graph.values():
+        print("//")
+        for j in i.keys():
+            print(j)
+            print(i[j])

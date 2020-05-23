@@ -4,7 +4,7 @@ from pathlib import Path
 class Clase:
   def __init__(self, line):
     self.code = line[0]
-    self.group = int(line[1])
+    self.group = (line[1])
     self.teacher = line[2]
     self.day = line[3]
     self.start_time = line[4]
