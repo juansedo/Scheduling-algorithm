@@ -13,6 +13,8 @@ def clasesById(clases, class_id, group):
 aulas = inits.aulasInit()
 estudiantes = inits.estudiantesInit()
 clases = inits.clasesInit()
+distancias = inits.distanciasInit()
+
 path = Path(__file__).parent / "mat20192.csv"
 with open(path, encoding="utf8") as csv_file:
   csv_reader = csv.reader(csv_file, delimiter=',')
@@ -25,4 +27,8 @@ with open(path, encoding="utf8") as csv_file:
     line_count += 1
   print(f'Processed {line_count} lines ({reg} registered).')
 
-graphs.createGraph(estudiantes)
+valids = graphs.getValidClasses(estudiantes)
+for valid in valids:
+    print("* "+valid.code + " " +str(graphs.analizeDistances(valid, 30, distancias)))
+    for clase in valid.arrival_classes:
+        print(clase.code + " " + clase.group + ": " + str(valid.arrival_students[clase.id]))

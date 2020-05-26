@@ -4,12 +4,15 @@ from pathlib import Path
 class Clase:
   def __init__(self, line):
     self.code = line[0]
-    self.group = (line[1])
+    self.group = line[1]
     self.teacher = line[2]
     self.day = line[3]
     self.start_time = line[4]
     self.end_time = line[5]
     self.room = line[6]
+    self.id = line[0]+"."+str(line[1])+"."+line[3]+(line[4][0])+"-"+(line[5][0])
+    self.arrival_classes = []
+    self.arrival_students = {}
 
   def __repr__(self):
     return f'<%s, %s, %s>' % (self.code, self.group, self.day)
@@ -75,8 +78,10 @@ def distanciasInit():
       dist = int(row[2])
       if distancias.get(b1) is None:
         distancias[b1] = {}
+        distancias[b1][b1] = 0
       if distancias.get(b2) is None:
         distancias[b2] = {}
+        distancias[b2][b2] = 0
       distancias[b1][b2] = dist
       distancias[b2][b1] = dist
       line_count += 1
