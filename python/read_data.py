@@ -28,7 +28,7 @@ with open(path, encoding="utf8") as csv_file:
   print(f'Processed {line_count} lines ({reg} registered).')
 
 valids = graphs.getValidClasses(estudiantes)
-for valid in valids:
-    print("* "+valid.code + " " +str(graphs.analizeDistances(valid, 30, distancias)))
-    for clase in valid.arrival_classes:
-        print(clase.code + " " + clase.group + ": " + str(valid.arrival_students[clase.id]))
+posibles_distancias = graphs.analizeDistances(valids, distancias)
+for i in posibles_distancias.keys():
+    print(i)
+    print(posibles_distancias[i])

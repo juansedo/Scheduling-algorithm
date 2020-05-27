@@ -19,11 +19,28 @@ def getValidClasses(estudiantes):
 
 
 
-def analizeDistances(valid, bloque, distancias):
-    distancia = 0
-    for clase in valid.arrival_classes:
-        if int(clase.room[:2]) != 0:
-            distancia += valid.arrival_students[clase.id] * distancias[bloque][int(clase.room[:2])]
-        else:
-            return -1
-    return distancia
+def analizeDistances(valids, distancias):
+    distancias_totales = {}
+    for valid in valids:
+        distancias_totales[valid.id] = []
+        for bloque in distancias.keys():
+            if bloque == "28":
+                continue
+            distancia = 0
+            for clase in valid.arrival_classes:
+                if int(clase.room[:2]) != 0 and clase.room[:2] != "28":
+                    print(distancias[int(bloque)][int(clase.room[:2])])
+                    distancia += valid.arrival_students[clase.id] * distancias[int(bloque)][int(clase.room[:2])]
+                else:
+                    distancia = -1
+                    break
+            if len(distancias_totales[valid.id]) == 0:
+                distancias_totales[valid.id].append((bloque, distancia))
+            else:
+                for i in range(len(distancias_totales[valid.id])):
+                    if distancia < distancias_totales[valid.id][i][1]:
+                        distancias_totales[valid.id].insert(i, (bloque, distancia))
+                        break
+                    elif i == len(distancias_totales[valid.id]) - 1:
+                        distancias_totales[valid.id].append( (bloque, distancia))
+    return distancias_totales
