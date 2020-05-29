@@ -140,3 +140,13 @@ def distanciasInit():
       line_count += 1
     print(f'DistanciaBloques: Processed {line_count} lines.')
   return distancias
+
+
+def mappingClases(clases):
+  out = {}
+  for cl in clases:
+    cl_id = str(cl.code) + "." + str(cl.group)
+    if out.get(cl_id) is None:
+      out[cl_id] = set([])
+    out[cl_id].add(cl)
+  return out

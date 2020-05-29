@@ -1,19 +1,17 @@
+import time
 import csv
 import inits
 from pathlib import Path
 import graphs
 
-def clasesById(clases, class_id, group):
-  set_class = set([])
-  for cl in clases:
-    if cl.code == class_id and str(cl.group) == group:
-      set_class.add(cl)
-  return set_class
+start_time = time.time()
 
 aulas = inits.aulasInit()
 estudiantes = inits.estudiantesInit()
 clases = inits.clasesInit()
 distancias = inits.distanciasInit()
+
+map_of_clases = inits.mappingClases(clases)
 
 path = Path(__file__).parent / "mat20192.csv"
 with open(path, encoding="utf8") as csv_file:
@@ -22,8 +20,10 @@ with open(path, encoding="utf8") as csv_file:
   reg = 0
   for row in csv_reader:
     if estudiantes.get(row[0]) is not None:
-      estudiantes[row[0]].addClass(clasesById(clases, row[1], row[2]))
-      reg +=1
+      id_clase = row[1]+"."+row[2]
+      if map_of_clases.get(id_clase) is not None:
+        estudiantes[row[0]].addClass(map_of_clases[id_clase])
+        reg +=1
     line_count += 1
   print(f'mat20192 file: Processed {line_count} lines ({reg} registered).')
 
@@ -73,7 +73,7 @@ for i in clases_simples.keys():
   findClassrooms(aulas, distancias, clases_simples, i)
   print(i, ",", clases_simples[i], ".\n", clases_simples[i].distances)
 
-
+print("--- %s seconds ---" % (time.time() - start_time))
 #valids = graphs.getValidClasses(estudiantes)
 #posibles_distancias = graphs.analizeDistances(valids, distancias)
 #for i in posibles_distancias.keys():
