@@ -61,9 +61,13 @@ def clasesSimplesInit(estudiantes):
             if clases.get(c_hasta) is None:
               clases[c_hasta] = ClaseSimpleInfo(c_hasta.room)
             clases[c_hasta].addArrival(c_desde)
-          #elif c_hasta.room == 0:
-          #  if clases.get(c_hasta) is None:
-          #    clases[c_hasta] = ClaseSimpleInfo(c_hasta.room)
+          elif c_hasta.room == 0:
+            if clases.get(c_hasta) is None:
+              clases[c_hasta] = ClaseSimpleInfo(c_hasta.room)
+          
+          if c_desde.room == 0:
+            if clases.get(c_desde) is None:
+              clases[c_desde] = ClaseSimpleInfo(c_desde.room)
   return clases
 
 class Aula:
@@ -84,11 +88,11 @@ def aulasInit():
     line_count = 0
     aulas = {}
     for row in csv_reader:
-      id = int(row[0])
-      b = id / 1000
+      i = int(row[0])
+      b = i // 1000
       if aulas.get(b) is None:
         aulas[b] = {}
-        aulas[b][id] = Aula(row)
+      aulas[b][i] = Aula(row)
       line_count += 1
     print(f'aulas: Processed {line_count} lines.')
   return aulas

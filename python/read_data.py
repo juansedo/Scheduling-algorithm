@@ -31,11 +31,11 @@ clases_simples = inits.clasesSimplesInit(estudiantes)
 
 def findClassrooms(aulas, distancias, clases_simples, clase):
   clase = clases_simples.get(clase)
-  if clase.visited or len(clase.arrivals) == 0:
+  if clase is None or clase.visited or len(clase.arrivals.keys()) == 0:
     return
+  isThereZero = 0
   clase.visited = True
   dist_totales = []
-  isThereZero = False
   for b in distancias.keys():
     if b == 28: continue
     total = 0
@@ -43,28 +43,32 @@ def findClassrooms(aulas, distancias, clases_simples, clase):
       if value['block'] == 0 and clases_simples.get(key) is not None:
         findClassrooms(aulas, distancias, clases_simples, key)
       elif value['block'] == 0:
-        isThereZero = True
+        isThereZero += 1
         continue
       elif distancias[b].get(value['block']) is None:
         continue
       total += value['amount'] * distancias[b][value['block']]
-    dist_totales.append([total, b])
-  clase.distances = sorted(dist_totales, key= lambda elem: elem[0])
+    dist_totales.append([b, total])
+  clase.distances = sorted(dist_totales, key= lambda elem: elem[1])
   
-  if isThereZero:
-    for key, value in clase.arrivals.items():
-      if value['block'] == 0:
-        value['block'] = clase.room//1000
-    return findClassrooms(aulas, distancias, clases_simples, clase)
-
   for dist in clase.distances:
-    if aulas.get(dist[1]) is None: continue
-    possible_rooms = [x for x in aulas[dist[1]].keys() if aulas[dist][x].available]
+    if clase.room != 0 and not isThereZero: return
+    if aulas.get(dist[0]) is None: continue
+    possible_rooms = [x for x in aulas[dist[0]].keys() if aulas[dist[0]][x].available]
     if len(possible_rooms) > 0:
-      clase.room = possible_rooms[0]
-      aulas[dist][x].available = False
+      if clase.room == 0:
+        clase.room = possible_rooms.pop(0)
+        aulas[dist[0]][clase.room].available = False
+        
+      if isThereZero > 0:
+        for key in clase.arrivals.keys():
+          if len(possible_rooms) == 0: continue          
+          if clase.arrivals[key]['block'] == 0:
+            if clases_simples.get(key) is not None:
+              clases_simples[key].room = possible_rooms.pop(0)
+              clase.arrivals[key]['block'] = clases_simples[key].room // 1000
+            
   
-
 for i in clases_simples.keys():
   findClassrooms(aulas, distancias, clases_simples, i)
   print(i, ",", clases_simples[i], ".\n", clases_simples[i].distances)
