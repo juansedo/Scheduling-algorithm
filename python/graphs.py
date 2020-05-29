@@ -1,3 +1,5 @@
+import inits
+
 def getValidClasses(estudiantes):
     valids = []
     for estudiante in estudiantes.values():
@@ -16,8 +18,6 @@ def getValidClasses(estudiantes):
                         except:
                             clase_hasta.arrival_students[clase_desde.id] = 1
     return valids
-
-
 
 def analizeDistances(valids, distancias):
     distancias_totales = {}
@@ -44,3 +44,11 @@ def analizeDistances(valids, distancias):
                     elif i == len(distancias_totales[valid.id]) - 1:
                         distancias_totales[valid.id].append( (bloque, distancia))
     return distancias_totales
+
+def getTotalDistances(distances, clase):
+  total = {}
+  for bloque in distances.keys():
+    total[bloque] = 0
+    for i in clase.arrivals.keys():
+      total[bloque] += clase.arrivals[i] * distances[bloque][clase.arrivals[i]]
+  return total
