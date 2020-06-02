@@ -8,7 +8,7 @@ start_time = time.time()
 
 aulas = inits.aulasInit()
 estudiantes = inits.estudiantesInit()
-clases = inits.clasesInit()
+clases = inits.clasesInit(aulas)
 distancias = inits.distanciasInit()
 
 map_of_clases = inits.mappingClases(clases)
@@ -23,7 +23,7 @@ with open(path, encoding="utf8") as csv_file:
       id_clase = row[1]+"."+row[2]
       if map_of_clases.get(id_clase) is not None:
         estudiantes[row[0]].addClass(map_of_clases[id_clase])
-        reg +=1
+        reg +=len(map_of_clases[id_clase])
     line_count += 1
   print(f'mat20192 file: Processed {line_count} lines ({reg} registered).')
 
@@ -33,49 +33,50 @@ def findClassrooms(aulas, distancias, clases_simples, clase):
   clase = clases_simples.get(clase)
   if clase is None or clase.visited or len(clase.arrivals.keys()) == 0:
     return
-  isThereZero = 0
+  zeroCount = set([])
   clase.visited = True
   dist_totales = []
   for b in distancias.keys():
     if b == 28: continue
     total = 0
-    for key, value in clase.arrivals.items():
-      if value['block'] == 0 and clases_simples.get(key) is not None:
-        findClassrooms(aulas, distancias, clases_simples, key)
-      elif value['block'] == 0:
-        isThereZero += 1
+    for arrival in clase.arrivals.values():
+      if arrival.block == 0:
+        findClassrooms(aulas, distancias, clases_simples, arrival)
+        if arrival.block == 0: zeroCount.add(arrival)
         continue
-      elif distancias[b].get(value['block']) is None:
+      elif distancias[b].get(arrival.block) is None:
         continue
-      total += value['amount'] * distancias[b][value['block']]
+      total += arrival.amount * distancias[b][arrival.block]
+    if clase.room != 0: total += distancias[b][(clase.room // 1000)]
     dist_totales.append([b, total])
   clase.distances = sorted(dist_totales, key= lambda elem: elem[1])
   
+  print(clase)
   for dist in clase.distances:
-    if clase.room != 0 and not isThereZero: return
+    if clase.room != 0 and not zeroCount: return
     if aulas.get(dist[0]) is None: continue
+    
     possible_rooms = [x for x in aulas[dist[0]].keys() if aulas[dist[0]][x].available]
-    if len(possible_rooms) > 0:
-      if clase.room == 0:
-        clase.room = possible_rooms.pop(0)
+    if not possible_rooms: continue
+
+    if clase.room == 0:
+        clase.room = possible_rooms.pop()
         aulas[dist[0]][clase.room].available = False
-        
-      if isThereZero > 0:
-        for key in clase.arrivals.keys():
-          if len(possible_rooms) == 0: continue          
-          if clase.arrivals[key]['block'] == 0:
-            if clases_simples.get(key) is not None:
-              clases_simples[key].room = possible_rooms.pop(0)
-              clase.arrivals[key]['block'] = clases_simples[key].room // 1000
-            
-  
+    
+    zeroCount_copy = zeroCount.copy()
+
+    for arrival_zero in zeroCount_copy:
+      if not possible_rooms: break
+      arrival_room = possible_rooms.pop()
+      clases_simples[arrival_zero.id].room = arrival_room
+      clase.arrivals[arrival_zero.id].block = dist[0]
+      aulas[dist[0]][arrival_room].available = False
+      zeroCount.remove(arrival_zero)
+
 for i in clases_simples.keys():
   findClassrooms(aulas, distancias, clases_simples, i)
+
+for i in clases_simples.keys():
   print(i, ",", clases_simples[i], ".\n", clases_simples[i].distances)
 
 print("--- %s seconds ---" % (time.time() - start_time))
-#valids = graphs.getValidClasses(estudiantes)
-#posibles_distancias = graphs.analizeDistances(valids, distancias)
-#for i in posibles_distancias.keys():
-#    print(i)
-#    print(posibles_distancias[i])
