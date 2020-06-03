@@ -58,7 +58,7 @@ def checkAvailability(room, clase):
     available = not (clase.impairment and (not room.impairment) or clase.numberOfStudents < int(room.capacity))
     if not available:
         return False
-    for time_lapse in clase.availability[clase.day]
+    for time_lapse in room.availability[clase.day]:
         time_lapse = time_lapse.split("-")
         available = available and not (tti(time_lapse[0]) < tti(room.start_time) < tti(time_lapse[0]) or tti(time_lapse[0]) < tti(room.end_time) < tti(time_lapse[0]))
     return available

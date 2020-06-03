@@ -2,13 +2,13 @@ import csv
 from pathlib import Path
 
 class Clase:
+  def __init__(self, line):
     switcher = {
       "lunes": 'L', "martes": 'M',
-      "miércoles": 'W', "jueves": 'J',
-      "viernes": 'V', "sábado": 'S',
-      "domingo": 'D'
+       "miércoles": 'W', "jueves": 'J',
+       "viernes": 'V', "sábado": 'S',
+       "domingo": 'D'
     }
-  def __init__(self, line):
     self.code = line[0]
     self.group = line[1]
     self.teacher = line[2]
@@ -33,11 +33,14 @@ class Arrival:
     return f'(id:%s, b:%s, t:%s)' % (self.id, self.block, self.amount)
 
 class ClaseSimpleInfo:
-  def __init__(self, room):
+  def __init__(self, room, impairment, numberOfStudents, day):
     self.arrivals = {}
     self.distances = []
     self.room = room
+    self.impairment = impairment
+    self.numberOfStudents = numberOfStudents
     self.visited = False
+    self.day = day
 
   def addArrival(self, clase):
     if self.arrivals.get(clase.id) is None:
@@ -71,16 +74,16 @@ def clasesSimplesInit(estudiantes):
         for c_hasta in est.days[day]:
           if c_desde.id != c_hasta.id and c_desde.end_time == c_hasta.start_time:
             if clases.get(c_hasta.id) is None:
-              clases[c_hasta.id] = ClaseSimpleInfo(c_hasta.room)
+              clases[c_hasta.id] = ClaseSimpleInfo(c_hasta.room, c_hasta.impairment, c_hasta.numberOfStudents, c_hasta.day)
             clases[c_hasta.id].addArrival(c_desde)
 
           if c_hasta.room == 0:
             if clases.get(c_hasta.id) is None:
-              clases[c_hasta.id] = ClaseSimpleInfo(c_hasta.room)
+              clases[c_hasta.id] = ClaseSimpleInfo(c_hasta.room, c_hasta.impairment, c_hasta.numberOfStudents, c_hasta.day)
 
           if c_desde.room == 0:
             if clases.get(c_desde) is None:
-              clases[c_desde.id] = ClaseSimpleInfo(c_desde.room)
+              clases[c_desde.id] = ClaseSimpleInfo(c_desde.room, c_desde.impairment, c_desde.numberOfStudents, c_desde.day)
   return clases
 
 class Aula:
@@ -113,7 +116,7 @@ def aulasInit():
 class Estudiante:
   def __init__(self, line):
     self.code = line[0]
-    self.inpairment = line[1] == "1"
+    self.impairment = line[1] == "1"
     self.days = {'L' : [], 'M' : [], 'W' : [], 'J' : [], 'V' : [], 'S' : [], 'D' : []}
 
   def addClass(self, classrooms):

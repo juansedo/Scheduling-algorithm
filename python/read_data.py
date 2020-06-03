@@ -23,7 +23,7 @@ with open(path, encoding="utf8") as csv_file:
       id_clase = row[1]+"."+row[2]
       if map_of_clases.get(id_clase) is not None:
         estudiantes[row[0]].addClass(map_of_clases[id_clase])
-        
+
         reg +=len(map_of_clases[id_clase])
     line_count += 1
   print(f'mat20192 file: Processed {line_count} lines ({reg} registered).')
@@ -57,12 +57,12 @@ def findClassrooms(aulas, distancias, clases_simples, clase):
     if clase.room != 0 and not zeroCount: return
     if aulas.get(dist[0]) is None: continue
 
-    possible_rooms = [x for x in aulas[dist[0]].keys() if aulas[dist[0]][x].available]
+    possible_rooms = [x for x in aulas[dist[0]].keys() if graphs.checkAvailability(aulas[dist[0]][x], clase)]
     if not possible_rooms: continue
 
     if clase.room == 0:
         clase.room = possible_rooms.pop()
-        aulas[dist[0]][clase.room].available = False
+        aulas[dist[0]][clase.room].availability[clase.day].append([clase.start_time+"-"+clase.end_time])
 
     zeroCount_copy = zeroCount.copy()
 
