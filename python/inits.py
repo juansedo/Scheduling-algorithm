@@ -2,13 +2,13 @@ import csv
 from pathlib import Path
 
 class Clase:
-  def __init__(self, line):
     switcher = {
       "lunes": 'L', "martes": 'M',
       "miércoles": 'W', "jueves": 'J',
       "viernes": 'V', "sábado": 'S',
       "domingo": 'D'
     }
+  def __init__(self, line):
     self.code = line[0]
     self.group = line[1]
     self.teacher = line[2]
@@ -16,8 +16,10 @@ class Clase:
     self.start_time = line[4]
     self.end_time = line[5]
     self.room = int(line[6])
+    self.impairment = False
+    self.numberOfStudents = 0
     self.id = f'<%s.%s.%s>' % (self.code, self.group, self.day)
-    
+
   def __repr__(self):
     return f'<%s.%s.%s>' % (self.code, self.group, self.day)
 
@@ -53,9 +55,10 @@ def clasesInit(aulas):
     clases = []
     for row in csv_reader:
       block = int(row[6]) // 1000
-      #if aulas.get(block) is not None and aulas[block].get(row[6]) is not None:
-      #  aulas[block][row[6]].available = False
       clases.append(Clase(row))
+      if aulas.get(block) is not None and aulas[block].get(row[6]) is not None:
+          last_class = clases[-1]
+          aulas[block].get(row[6]).availability[last_class.day].append(last_class.start_time+"-"+last_class.end_time)
       line_count += 1
     print(f'pa20192: Processed {line_count} lines.')
   return clases
@@ -70,11 +73,11 @@ def clasesSimplesInit(estudiantes):
             if clases.get(c_hasta.id) is None:
               clases[c_hasta.id] = ClaseSimpleInfo(c_hasta.room)
             clases[c_hasta.id].addArrival(c_desde)
-          
+
           if c_hasta.room == 0:
             if clases.get(c_hasta.id) is None:
               clases[c_hasta.id] = ClaseSimpleInfo(c_hasta.room)
-          
+
           if c_desde.room == 0:
             if clases.get(c_desde) is None:
               clases[c_desde.id] = ClaseSimpleInfo(c_desde.room)
@@ -86,7 +89,7 @@ class Aula:
     self.desc = line[1]
     self.capacity = line[2]
     self.access = line[3] == "1"
-    self.available = True
+    self.availability = {'L' : [], 'M' : [], 'W' : [], 'J' : [], 'V' : [], 'S' : [], 'D' : []}
 
   def __str__(self):
     return self.id + ", " + self.tipo + "\n"
@@ -116,6 +119,8 @@ class Estudiante:
   def addClass(self, classrooms):
     for cl in classrooms:
       self.days[cl.day].append(cl)
+      cl.numberOfStudents += 1
+      cl.impairment = cl.impairment or self.impairment
 
 def estudiantesInit():
   path = Path(__file__).parent / "estudiantes.csv"
