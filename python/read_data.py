@@ -29,19 +29,21 @@ with open(path, encoding="utf8") as csv_file:
   print(f'mat20192 file: Processed {line_count} lines ({reg} registered).')
 
 clases_simples = inits.clasesSimplesInit(estudiantes)
+clases_simples.sort(key=lambda x: (int(x.impairment), x.numberOfStudents))
 
+for clase in clases_simples:
+    graphs.AssignRooms(clase, distancias, aulas)
+"""
 def findClassrooms(aulas, distancias, clases_simples, clase):
-  clase = clases_simples.get(clase)
-  if clase is None or clase.visited or len(clase.arrivals.keys()) == 0:
+  if clase is None or len(clase.arrivals.keys()) == 0:
     return
   zeroCount = set([])
-  clase.visited = True
   dist_totales = []
   for b in distancias.keys():
     if b == 28: continue
     total = 0
     for arrival in clase.arrivals.values():
-      if arrival.block == 0:
+      if arrival[0].block() == 0:
         findClassrooms(aulas, distancias, clases_simples, arrival)
         if arrival.block == 0: zeroCount.add(arrival)
         continue
@@ -74,10 +76,12 @@ def findClassrooms(aulas, distancias, clases_simples, clase):
       aulas[dist[0]][arrival_room].available = False
       zeroCount.remove(arrival_zero)
 
-for i in clases_simples.keys():
+for i in clases_simples:
   findClassrooms(aulas, distancias, clases_simples, i)
 
-for i in clases_simples.keys():
-  print(i, ",", clases_simples[i], ".\n", clases_simples[i].distances)
+for i in clases_simples:
+  print(i, ".\n", i.distances)
+"""
+
 
 print("--- %s seconds ---" % (time.time() - start_time))

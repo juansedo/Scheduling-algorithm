@@ -19,6 +19,15 @@ class Clase:
     self.impairment = False
     self.numberOfStudents = 0
     self.id = f'<%s.%s.%s>' % (self.code, self.group, self.day)
+    self.arrivals = {}
+
+  def block(self):
+      return self.room // 1000
+
+  def addArrival(self, clase):
+    if self.arrivals.get(clase.id) is None:
+      self.arrivals[clase.id] = [clase, 0]
+    self.arrivals[clase.id][1]+= 1
 
   def __repr__(self):
     return f'<%s.%s.%s>' % (self.code, self.group, self.day)
@@ -31,24 +40,6 @@ class Arrival:
 
   def __repr__(self):
     return f'(id:%s, b:%s, t:%s)' % (self.id, self.block, self.amount)
-
-class ClaseSimpleInfo:
-  def __init__(self, room, impairment, numberOfStudents, day):
-    self.arrivals = {}
-    self.distances = []
-    self.room = room
-    self.impairment = impairment
-    self.numberOfStudents = numberOfStudents
-    self.visited = False
-    self.day = day
-
-  def addArrival(self, clase):
-    if self.arrivals.get(clase.id) is None:
-      self.arrivals[clase.id] = Arrival(clase.id, clase.room//1000, 0)
-    self.arrivals[clase.id].amount += 1
-
-  def __repr__(self):
-    return f'(r:%s, arr:%s)' % (self.room, self.arrivals)
 
 def clasesInit(aulas):
   path = Path(__file__).parent / "pa20192.csv"
@@ -67,30 +58,22 @@ def clasesInit(aulas):
   return clases
 
 def clasesSimplesInit(estudiantes):
-  clases = {}
+  clases = []
   for est in estudiantes.values():
     for day in est.days.keys():
       for c_desde in est.days[day]:
         for c_hasta in est.days[day]:
-          if c_desde.id != c_hasta.id and c_desde.end_time == c_hasta.start_time:
-            if clases.get(c_hasta.id) is None:
-              clases[c_hasta.id] = ClaseSimpleInfo(c_hasta.room, c_hasta.impairment, c_hasta.numberOfStudents, c_hasta.day)
-            clases[c_hasta.id].addArrival(c_desde)
-
-          if c_hasta.room == 0:
-            if clases.get(c_hasta.id) is None:
-              clases[c_hasta.id] = ClaseSimpleInfo(c_hasta.room, c_hasta.impairment, c_hasta.numberOfStudents, c_hasta.day)
-
-          if c_desde.room == 0:
-            if clases.get(c_desde) is None:
-              clases[c_desde.id] = ClaseSimpleInfo(c_desde.room, c_desde.impairment, c_desde.numberOfStudents, c_desde.day)
+          if c_desde.code != c_hasta.code and c_desde.end_time == c_hasta.start_time:
+            if c_hasta not in clases:
+              clases.append(c_hasta)
+            c_hasta.addArrival(c_desde)
   return clases
 
 class Aula:
   def __init__(self, line):
     self.id = int(line[0])
     self.desc = line[1]
-    self.capacity = line[2]
+    self.capacity = line[2] if line[2] != "N/A" else 1000
     self.access = line[3] == "1"
     self.availability = {'L' : [], 'M' : [], 'W' : [], 'J' : [], 'V' : [], 'S' : [], 'D' : []}
 
