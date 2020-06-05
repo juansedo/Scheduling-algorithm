@@ -50,9 +50,6 @@ def clasesInit(aulas):
     for row in csv_reader:
       block = int(row[6]) // 1000
       clases.append(Clase(row))
-      if aulas.get(block) is not None and aulas[block].get(row[6]) is not None:
-          last_class = clases[-1]
-          aulas[block].get(row[6]).availability[last_class.day].append(last_class.start_time+"-"+last_class.end_time)
       line_count += 1
     print(f'pa20192: Processed {line_count} lines.')
   return clases
@@ -77,8 +74,6 @@ class Aula:
     self.access = line[3] == "1"
     self.availability = {'L' : [], 'M' : [], 'W' : [], 'J' : [], 'V' : [], 'S' : [], 'D' : []}
 
-  def __str__(self):
-    return self.id + ", " + self.tipo + "\n"
 
 def aulasInit():
   path = Path(__file__).parent / "aulas.csv"
@@ -151,3 +146,9 @@ def mappingClases(clases):
       out[cl_id] = set([])
     out[cl_id].add(cl)
   return out
+
+def initAvailabilities(clases, aulas):
+    for clasex in clases:
+        block = clasex.block()
+        if aulas.get(block) is not None and aulas[block].get(clasex.room) is not None:
+            aulas[block][clasex.room].availability[clasex.day].append(clasex.start_time+"-"+clasex.end_time)

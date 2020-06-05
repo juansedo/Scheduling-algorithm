@@ -27,61 +27,21 @@ with open(path, encoding="utf8") as csv_file:
         reg +=len(map_of_clases[id_clase])
     line_count += 1
   print(f'mat20192 file: Processed {line_count} lines ({reg} registered).')
+  clases = [x for x in clases if x.numberOfStudents > 0]
+  clases.sort(key = lambda x: x.code)
+
+
 
 clases_simples = inits.clasesSimplesInit(estudiantes)
+inits.initAvailabilities(clases, aulas)
 clases_simples.sort(key=lambda x: (int(x.impairment), x.numberOfStudents))
+
 
 for clase in clases_simples:
     graphs.AssignRooms(clase, distancias, aulas)
-"""
-def findClassrooms(aulas, distancias, clases_simples, clase):
-  if clase is None or len(clase.arrivals.keys()) == 0:
-    return
-  zeroCount = set([])
-  dist_totales = []
-  for b in distancias.keys():
-    if b == 28: continue
-    total = 0
-    for arrival in clase.arrivals.values():
-      if arrival[0].block() == 0:
-        findClassrooms(aulas, distancias, clases_simples, arrival)
-        if arrival.block == 0: zeroCount.add(arrival)
-        continue
-      elif distancias[b].get(arrival.block) is None:
-        continue
-      total += arrival.amount * distancias[b][arrival.block]
-    if clase.room != 0: total += distancias[b][(clase.room // 1000)]
-    dist_totales.append([b, total])
-  clase.distances = sorted(dist_totales, key= lambda elem: elem[1])
 
-  print(clase)
-  for dist in clase.distances:
-    if clase.room != 0 and not zeroCount: return
-    if aulas.get(dist[0]) is None: continue
-
-    possible_rooms = [x for x in aulas[dist[0]].keys() if graphs.checkAvailability(aulas[dist[0]][x], clase)]
-    if not possible_rooms: continue
-
-    if clase.room == 0:
-        clase.room = possible_rooms.pop()
-        aulas[dist[0]][clase.room].availability[clase.day].append([clase.start_time+"-"+clase.end_time])
-
-    zeroCount_copy = zeroCount.copy()
-
-    for arrival_zero in zeroCount_copy:
-      if not possible_rooms: break
-      arrival_room = possible_rooms.pop()
-      clases_simples[arrival_zero.id].room = arrival_room
-      clase.arrivals[arrival_zero.id].block = dist[0]
-      aulas[dist[0]][arrival_room].available = False
-      zeroCount.remove(arrival_zero)
-
-for i in clases_simples:
-  findClassrooms(aulas, distancias, clases_simples, i)
-
-for i in clases_simples:
-  print(i, ".\n", i.distances)
-"""
-
+for clase in clases:
+    graphs.AssignBestRoom(clase, aulas, distancias, [])
+    print(clase.room)
 
 print("--- %s seconds ---" % (time.time() - start_time))
