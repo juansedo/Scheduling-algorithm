@@ -72,7 +72,8 @@ class Clase:
     self.arrivals[clase.__repr__()].amount += 1
 
   def getBlock(self): # Permite enlistar los bloques inexistentes
-    return self.room // 1000 if (self.room // 1000) not in [0, 21, 28, 31] else -1
+    ret = self.room // 1000
+    return ret if (ret) not in [0, 21, 28, 31] else -1
   
   def getSchedule(self):
     return self.start_time + "-" + self.end_time
