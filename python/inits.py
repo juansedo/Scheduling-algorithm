@@ -109,7 +109,11 @@ def clasesInit():
     print(f'pa20192: Processed {line_count} lines.')
   return clases
 
-def clasesSimplesInit(estudiantes):
+"""
+arrivedClasesInit()
+  Inicializa una lista de clases que tienen clases inmediatamente antes de ellas
+"""
+def arrivedClasesInit(estudiantes):
   clases = []
   for est in estudiantes.values():
     for day in est.days.keys():
@@ -241,6 +245,33 @@ def distanciasInit():
       line_count += 1
     print(f'DistanciaBloques: Processed {line_count} lines.')
   return distancias
+
+"""
+matriculasInit()
+  Inicializa los días de clase de los estudiantes, limpiando además
+  de la lista de clases aquellas cuyo bloque o salón no se encuentra
+"""
+def matriculasInit(estudiantes, clases):
+  #Se mapean las clases para facilitar la asignación
+  map_of_clases = mappingClases(clases)
+
+  path = Path(__file__).parent / "mat20192.csv"
+  with open(path, encoding="utf8") as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    line_count = 0
+    reg = 0
+    for row in csv_reader:
+      if estudiantes.get(row[0]) is not None:
+        id_clase = row[1]+"."+row[2]
+        if map_of_clases.get(id_clase) is not None:
+          estudiantes[row[0]].addClass(map_of_clases[id_clase])
+          reg +=len(map_of_clases[id_clase])
+      line_count +=1
+    print(f'mat20192 file: Processed {line_count} lines ({reg} registered).')
+    #Se eliminan las clases que no tienen un aula asignada
+    for clase in clases:
+      try:    a = aulas[clases.bloque()][clases.room]
+      except: clases.remove(clase)
 
 """
 mappingClases(clases)
