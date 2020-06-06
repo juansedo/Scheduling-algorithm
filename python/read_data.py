@@ -3,7 +3,9 @@ import csv
 import inits
 from pathlib import Path
 import graphs
+import copy
 
+times = {}
 start_time = time.time()
 
 # Inicializaciones de datos
@@ -12,26 +14,38 @@ aulas = inits.aulasInit()
 estudiantes = inits.estudiantesInit()
 clases = inits.clasesInit()
 inits.matriculasInit(estudiantes, clases)
+times['init'] = time.time()
 
 # Limpieza de información
 clases = [x for x in clases if x.numberOfStudents > 0 and x.room != 0]
 arrived_clases = inits.arrivedClasesInit(estudiantes)
 arrived_clases = [x for x in arrived_clases if x.numberOfStudents > 0 and x.room != 0]
+times['clean'] = time.time()
 
-for clase in arrived_clases:
-    print(clase.room)
+# Guardando información de antes
+old_arrived_clases = {cl.__repr__(): cl for cl in copy.deepcopy(arrived_clases)}
+times['s_old'] = time.time()
 
-print ("Total: ", len(arrived_clases))
-print("old distance= " + str(graphs.calcDistances(arrived_clases, distancias)))
+# Algoritmo
 inits.initAvailabilities(clases, aulas)
 arrived_clases.sort(key=lambda x: (int(x.impairment), x.numberOfStudents))
-
 for clase in arrived_clases:
     graphs.AssignRooms(clase, distancias, aulas)
+times['exec'] = time.time()                    # Stop del cronómetro
 
-for clase in arrived_clases:
-    print(clase.room)
+# Guardando información de después
+new_arrived_clases = {cl.__repr__(): cl for cl in copy.deepcopy(arrived_clases)}
+times['s_new'] = time.time()
 
-print ("Total: ", len(arrived_clases))
-print("new distance= " + str(graphs.calcDistances(arrived_clases, distancias)))
-print("--- %s seconds ---" % (time.time() - start_time))
+# Imprimiendo información
+graphs.print_comparison(distancias, old_arrived_clases, new_arrived_clases)
+
+times['s_new'] -= times['exec']
+times['exec'] -= times['s_old']
+times['s_old'] -= times['clean']
+times['clean'] -= times['init']
+times['init'] -= start_time
+print("\nTimes:")
+for t, v in times.items():
+  print(t,":\t",v,"s")
+print("TOTAL TIME:", sum(times.values()),"s")

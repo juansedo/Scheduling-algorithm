@@ -86,3 +86,11 @@ def calcDistances(clases, distancias):
                 continue
             distancia += arrival.amount * distancias[clase.getBlock()][arrival.clase.getBlock()]
     return distancia
+
+def print_comparison(distancias, old, new):
+  print("Before...\t\t\t\tNow...")
+  for k in new.keys():
+      print(old[k],":", old[k].room,end='\t\t\t')
+      print(new[k],":", new[k].room)
+  print("TOTAL DISTANCE :", str(calcDistances(old.values(), distancias)), end='\t\t\t')
+  print("TOTAL DISTANCE :", str(calcDistances(new.values(), distancias)))
