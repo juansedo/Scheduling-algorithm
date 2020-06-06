@@ -2,6 +2,48 @@ import csv
 from pathlib import Path
 
 class Clase:
+  """
+    Representa una clase agendada o por agendar del archivo pa20192.csv
+
+    Atributos
+    ----------
+    code : str
+      Código de la clase
+    group : str
+      Número del grupo
+    teacher : str
+      Identificación del profesor
+    day : str {'L', 'M', 'W', 'J', 'V', 'S', 'D'}
+      El día en que se da la clase
+    start_time : str
+      Hora de inicio de la clase
+    end_time : str
+      Hora de finalización de la clase
+    room : int
+      Número de salón de clase
+    impairment : bool
+      True si la clase tiene algún discapacitado fisico
+    numberOfStudents : int
+      Cantidad de estudiantes que recibirá la clase
+    arrivals : [Arrival
+      Conjunto con las clases que le llegan a esta clase. Es
+      decir, están inmediatamente antes de esta y tienen 
+      estudiantes en común.
+
+    Métodos
+    -------
+    addArrival(clase)
+      Añade una clase a la lista de arrivals
+    
+    getBlock()
+      Obtiene el bloque en el que se encuentra la clase
+      actualmente.
+
+    getSchedule()
+      Obtiene el horario en el que se encuentra la clase
+      actualmente.
+      Formato: HORA_INICIO-HORA_FIN
+  """
   def __init__(self, line):
     switcher = {
       "lunes": 'L', "martes": 'M',
@@ -18,19 +60,41 @@ class Clase:
     self.room = int(line[6])
     self.impairment = False
     self.numberOfStudents = 0
-    self.id = f'<%s.%s.%s>' % (self.code, self.group, self.day)
     self.arrivals = {}
 
-  def block(self):
-      return self.room // 1000
+  def getBlock(self):
+    return self.room // 1000
+
+  def getSchedule(self):
+    return self.start_time + "-" + self.end_time
 
   def addArrival(self, clase):
-    if self.arrivals.get(clase.id) is None:
-      self.arrivals[clase.id] = Arrival(clase, 0)
-    self.arrivals[clase.id].amount += 1
+    if self.arrivals.get(clase.__repr__()) is None:
+      self.arrivals[clase.__repr__()] = Arrival(clase, 0)
+    self.arrivals[clase.__repr__()].amount += 1
 
   def __repr__(self):
     return f'<%s.%s.%s>' % (self.code, self.group, self.day)
+
+
+class Arrival:
+  """
+    Representa una clase del diccionario arrivals (ver Clase). Permite saber
+    cuántos estudiantes vienen por cada clase
+
+    Atributos
+    ----------
+    clase : Clase
+      Representa una clase
+    amount : int
+      Cantidad de estudiantes que vienen de esa clase
+  """
+  def __init__(self, clase, amount):
+    self.clase = clase
+    self.amount = amount
+
+  def _repr_(self):
+    return f'(id:%s, t:%s)' % (self.clase._repr_(), self.amount)
 
 def clasesInit(aulas):
   path = Path(__file__).parent / "pa20192.csv"
@@ -140,25 +204,6 @@ def mappingClases(clases):
 
 def initAvailabilities(clases, aulas):
     for clasex in clases:
-        block = clasex.block()
+        block = clasex.getBlock()
         if aulas.get(block) is not None and aulas[block].get(clasex.room) is not None:
             aulas[block][clasex.room].availability[clasex.day].append(clasex.start_time+"-"+clasex.end_time)
-
-class Arrival:
-  """
-    Representa una clase del conjunto arrival. Permite saber cuántos estudiantes
-    vienen por cada clase
-
-    Atributos
-    ----------
-    clase : Clase
-      Representa una clase
-    amount : int
-      Cantidad de estudiantes que vienen de esa clase
-  """
-  def __init__(self, clase, amount):
-    self.clase = clase
-    self.amount = amount
-
-  def _repr_(self):
-    return f'(id:%s, t:%s)' % (self.clase._repr_(), self.amount)

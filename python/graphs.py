@@ -10,8 +10,8 @@ def analizeSubDistances(clase, distancias, assigneds):
             continue
         distancia = 0
         for assigned in assigneds:
-            if assigned.clase.block() != 0 and assigned.clase.block() != 28 and assigned.clase.block() != 31 and assigned.clase.block() != 21:
-                distancia += assigned.amount * distancias[int(bloque)][assigned.clase.block()]
+            if assigned.clase.getBlock() != 0 and assigned.clase.getBlock() != 28 and assigned.clase.getBlock() != 31 and assigned.clase.getBlock() != 21:
+                distancia += assigned.amount * distancias[int(bloque)][assigned.clase.getBlock()]
             else:
                 distancia = -1
                 break
@@ -54,15 +54,15 @@ def AssignBestRoom(clase, aulas, distancias, conexiones):
         return
     bests = analizeSubDistances(clase, distancias, conexiones)
     for bloque in bests:
-        if bloque == clase.block():
+        if bloque == clase.getBlock():
             return
         for aula in aulas[bloque].values():
             if checkAvailability(clase, aula):
                 if clase.room == 14204:
                     return
-                if (clase.start_time+"-"+clase.end_time) in aulas[clase.block()][clase.room].availability[clase.day]:
-                    aulas[clase.block()][clase.room].availability[clase.day].remove(clase.start_time+"-"+clase.end_time)
-                aula.availability[clase.day].append(clase.start_time+"-"+clase.end_time)
+                if (clase.getSchedule()) in aulas[clase.getBlock()][clase.room].availability[clase.day]:
+                    aulas[clase.getBlock()][clase.room].availability[clase.day].remove(clase.getSchedule())
+                aula.availability[clase.day].append(clase.getSchedule())
                 clase.room = aula.id
                 return
     print("estamos es pero en la olla manito")
@@ -82,7 +82,7 @@ def calcDistances(clases, distancias):
     distancia = 0
     for clase in clases:
         for arrival in clase.arrivals.values():
-            if clase.block() == 0 or arrival.clase.block() == 0 or clase.block() == 28 or arrival.clase.block() == 28:
+            if clase.getBlock() == 0 or arrival.clase.getBlock() == 0 or clase.getBlock() == 28 or arrival.clase.getBlock() == 28:
                 continue
-            distancia += arrival.amount * distancias[clase.block()][arrival.clase.block()]
+            distancia += arrival.amount * distancias[clase.getBlock()][arrival.clase.getBlock()]
     return distancia
