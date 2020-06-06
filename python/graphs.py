@@ -35,36 +35,6 @@ def analizeBestDistances(arrivals, distancias):
     distancias_totales.append((bloque, distancia))
   return dict(sorted(distancias_totales, key=lambda elem: elem[1])).keys()
 
-"""
-checkAvailability()
-  Comprueba si no hay colisiones en un día determinado para cierto room con
-  el horario de la clase
-"""
-def checkAvailability(clase, room):
-    if (clase.impairment and not(room.access)) or clase.numberOfStudents > int(room.capacity):
-        return False
-    return all([checkTimeCollision(t, clase.getSchedule()) for t in room.availability[clase.day]])
-    #for time_lapse in room.availability[clase.day]:
-    #    time_lapse = time_lapse.split("-")
-    #    available = available and not tti(time_lapse[0]) <= tti(clase.start_time) < tti(time_lapse[1])
-    #    available = available and not tti(time_lapse[0]) < tti(clase.end_time) <= tti(time_lapse[1])
-    #    available = available and not(tti(time_lapse[0]) > tti(clase.start_time) and tti(time_lapse[1]) < tti(clase.end_time))
-    #return available
-
-"""
-checkTimeCollision(time1, time2)
-  Comprueba si, en cierto sentido, los tiempos dados en el formato 9:00-16:00
-  colisionan
-"""
-def checkTimeCollision(time1, time2):
-  time1 = time1.split("-")
-  time2 = time2.split("-")
-  return (tti(time2[1]) <= tti(time1[0]) or tti(time1[1]) <= tti(time2[0]))
-
-def tti(hora): #Time to int
-  return int("".join(hora.split(":")))
-
-
 def AssignBestRoom(clase, aulas, distancias, conexiones):
   bests = analizeSubDistances(clase, distancias, conexiones)
   #bests = analizeBestDistances(clase.arrivals.values(), distancias)
@@ -90,6 +60,28 @@ def AssignRooms(arrivedClase, distancias, aulas):
       AssignRooms(arrival.clase, distancias, aulas)
       AssignBestRoom(arrival.clase, aulas, distancias, getAssigneds(arrivedClase, arrival) + list(arrival.clase.arrivals.values()))
   AssignBestRoom(arrivedClase, aulas, distancias, arrivedClase.arrivals.values())
+
+"""
+checkAvailability()
+  Comprueba si no hay colisiones en un día determinado para cierto room con
+  el horario de la clase
+"""
+def checkAvailability(clase, room):
+    if (clase.impairment and not(room.access)) or clase.numberOfStudents > int(room.capacity):
+        return False
+    return all([checkTimeCollision(t, clase.getSchedule()) for t in room.availability[clase.day]])
+
+"""
+checkTimeCollision(time1, time2)
+  Comprueba si, en cierto sentido, los tiempos dados en el formato 9:00-16:00
+  colisionan
+"""
+def checkTimeCollision(time1, time2):
+  time1 = time1.split("-")
+  time2 = time2.split("-")
+  time1 = {'start': int("".join(time1[0].split(":"))), 'end': int("".join(time1[1].split(":")))}
+  time2 = {'start': int("".join(time2[0].split(":"))), 'end': int("".join(time2[1].split(":")))}
+  return (time2['end'] <= time1['start'] or time1['end'] <= time2['start'])
 
 """
 getAssigneds()
@@ -118,9 +110,11 @@ print_comparison()
   Imprime una comparación de las listas de clases antes y después
 """
 def print_comparison(distancias, old, new):
-  print("Before...\t\t\t\tNow...")
+  def formatNumber(num):
+    return "0" + str(num) if int(num) < 10000 else num
+  print("BEFORE...\t\t\t\t\tNOW...")
   for k in new.keys():
-    print(old[k],":", old[k].room,"(",old[k].getSchedule(),")",end='\t\t\t')
-    print(new[k],":", new[k].room,"(",new[k].getSchedule(),")")
-  print("TOTAL DISTANCE :", str(calcDistances(old.values(), distancias)), end='\t\t\t')
+    print(old[k],":", formatNumber(old[k].room),"(",old[k].getSchedule(),")",end='\t')
+    print(new[k],":", formatNumber(new[k].room),"(",new[k].getSchedule(),")")
+  print("TOTAL DISTANCE :", str(calcDistances(old.values(), distancias)), end='\t\t\t\t')
   print("TOTAL DISTANCE :", str(calcDistances(new.values(), distancias)))
