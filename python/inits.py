@@ -25,7 +25,7 @@ class Clase:
       True si la clase tiene algún discapacitado fisico
     numberOfStudents : int
       Cantidad de estudiantes que recibirá la clase
-    arrivals : [Arrival
+    arrivals : {str: Arrival}
       Conjunto con las clases que le llegan a esta clase. Es
       decir, están inmediatamente antes de esta y tienen 
       estudiantes en común.
@@ -61,18 +61,18 @@ class Clase:
     self.impairment = False
     self.numberOfStudents = 0
     self.arrivals = {}
-
-  def getBlock(self):
-    return self.room // 1000
-
-  def getSchedule(self):
-    return self.start_time + "-" + self.end_time
-
+  
   def addArrival(self, clase):
     if self.arrivals.get(clase.__repr__()) is None:
       self.arrivals[clase.__repr__()] = Arrival(clase, 0)
     self.arrivals[clase.__repr__()].amount += 1
 
+  def getBlock(self):
+    return self.room // 1000
+  
+  def getSchedule(self):
+    return self.start_time + "-" + self.end_time
+  
   def __repr__(self):
     return f'<%s.%s.%s>' % (self.code, self.group, self.day)
 
@@ -96,16 +96,16 @@ class Arrival:
   def _repr_(self):
     return f'(id:%s, t:%s)' % (self.clase._repr_(), self.amount)
 
-def clasesInit(aulas):
+"""
+clasesInit()
+  Inicializa una lista de clases recogidas de un csv
+"""
+def clasesInit():
   path = Path(__file__).parent / "pa20192.csv"
   with open(path, encoding="utf8") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
-    line_count = 0
-    clases = []
-    for row in csv_reader:
-      block = int(row[6]) // 1000
-      clases.append(Clase(row))
-      line_count += 1
+    clases = [Clase(row) for row in csv_reader]
+    line_count = len(clases)
     print(f'pa20192: Processed {line_count} lines.')
   return clases
 
@@ -122,6 +122,25 @@ def clasesSimplesInit(estudiantes):
   return clases
 
 class Aula:
+  """
+    Representa un aula de clase de la universidad
+
+    Atributos
+    ----------
+    id : int
+      Es el código del salón. Es int para poder
+      definir el bloque a partir de este
+    desc: str
+      Descripción del salón
+    capacity : int
+      Cantidad de estudiantes
+    access : bool
+      True si es accesible para discapacitados
+    availability : {str:[str]}
+      Diccionario con la información de los 
+      horarios en los que no se encuentra disponible
+      el salón
+  """
   def __init__(self, line):
     self.id = int(line[0])
     self.desc = line[1]
@@ -129,7 +148,10 @@ class Aula:
     self.access = line[3] == "1"
     self.availability = {'L' : [], 'M' : [], 'W' : [], 'J' : [], 'V' : [], 'S' : [], 'D' : []}
 
-
+"""
+aulasInit()
+  Inicializa una lista de salones recogidos de un csv
+"""
 def aulasInit():
   path = Path(__file__).parent / "aulas.csv"
   with open(path, encoding="utf8") as csv_file:
@@ -137,16 +159,35 @@ def aulasInit():
     line_count = 0
     aulas = {}
     for row in csv_reader:
-      i = int(row[0])
-      b = i // 1000
-      if aulas.get(b) is None:
-        aulas[b] = {}
-      aulas[b][i] = Aula(row)
+      room = int(row[0])
+      block = room // 1000
+      if aulas.get(block) is None:
+        aulas[block] = {}
+      aulas[block][room] = Aula(row)
       line_count += 1
     print(f'aulas: Processed {line_count} lines.')
   return aulas
 
 class Estudiante:
+  """
+    Representa a un estudiante del archivo estudiantes.csv
+
+    Atributos
+    ----------
+    code : str
+      Es el código del estudiante
+    impairment : bool
+      Indica si el estudiante tiene alguna discapacidad
+    days : {str: [Clase]}
+      Diccionario con la lista de clases que un
+      estudiantes tiene cada día
+
+    Métodos
+    -------
+    addClass(classrooms)
+      Recibe un conjunto de clases y las agrega al
+      estudiante según el día
+  """
   def __init__(self, line):
     self.code = line[0]
     self.impairment = line[1] == "1"
@@ -158,6 +199,10 @@ class Estudiante:
       cl.numberOfStudents += 1
       cl.impairment = cl.impairment or self.impairment
 
+"""
+estudiantesInit()
+  Inicializa un diccionario de los estudiantes recogidos de un csv
+"""
 def estudiantesInit():
   path = Path(__file__).parent / "estudiantes.csv"
   with open(path, encoding="utf8") as csv_file:
@@ -170,6 +215,11 @@ def estudiantesInit():
     print(f'estudiantes: Processed {line_count} lines.')
   return estudiantes
 
+
+"""
+distanciasInit()
+  Inicializa un diccionario de las distancias entre bloques recogidas de un csv
+"""
 def distanciasInit():
   path = Path(__file__).parent / "DistanciasBloques.csv"
   with open(path, encoding="utf8") as csv_file:
@@ -192,7 +242,14 @@ def distanciasInit():
     print(f'DistanciaBloques: Processed {line_count} lines.')
   return distancias
 
-
+"""
+mappingClases(clases)
+  Recibe una lista de clases y devuelve un diccionario que
+  organiza clases de mismo código y grupo por CÓDIGO.GRUPO
+  Así, si un estudiante se matriculó en ABC.10, en el
+  diccionario se guardarán todas los días que tiene clases
+  con esa materia 
+"""
 def mappingClases(clases):
   out = {}
   for cl in clases:
@@ -202,8 +259,12 @@ def mappingClases(clases):
     out[cl_id].add(cl)
   return out
 
+"""
+initAvailabilities()
+  Inicializa los horarios de las aulas
+"""
 def initAvailabilities(clases, aulas):
-    for clasex in clases:
-        block = clasex.getBlock()
-        if aulas.get(block) is not None and aulas[block].get(clasex.room) is not None:
-            aulas[block][clasex.room].availability[clasex.day].append(clasex.start_time+"-"+clasex.end_time)
+    for cl in clases:
+        block = cl.getBlock()
+        if aulas.get(block) is not None and aulas[block].get(cl.room) is not None:
+            aulas[block][cl.room].availability[cl.day].append(cl.getSchedule())

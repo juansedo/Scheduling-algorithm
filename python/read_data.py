@@ -8,7 +8,7 @@ start_time = time.time()
 
 aulas = inits.aulasInit()
 estudiantes = inits.estudiantesInit()
-clases = inits.clasesInit(aulas)
+clases = inits.clasesInit()
 distancias = inits.distanciasInit()
 
 map_of_clases = inits.mappingClases(clases)
