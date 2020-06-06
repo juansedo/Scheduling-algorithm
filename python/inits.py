@@ -37,7 +37,11 @@ class Clase:
     
     getBlock()
       Obtiene el bloque en el que se encuentra la clase
-      actualmente.
+      actualmente. Si devuelve -1, significa que el bloque
+      que iba a devolver está en la lista de no permitidos
+      (son aquellos que no tienen salones en aulas.csv,
+      bloques no definidos en DistanciasBloques.csv o
+      representan un error)
 
     getSchedule()
       Obtiene el horario en el que se encuentra la clase
@@ -67,8 +71,8 @@ class Clase:
       self.arrivals[clase.__repr__()] = Arrival(clase, 0)
     self.arrivals[clase.__repr__()].amount += 1
 
-  def getBlock(self):
-    return self.room // 1000
+  def getBlock(self): # Permite enlistar los bloques inexistentes
+    return self.room // 1000 if (self.room // 1000) not in [0, 21, 28, 31] else -1
   
   def getSchedule(self):
     return self.start_time + "-" + self.end_time

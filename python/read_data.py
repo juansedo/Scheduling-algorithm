@@ -1,7 +1,5 @@
 import time
-import csv
 import inits
-from pathlib import Path
 import graphs
 import copy
 
@@ -16,7 +14,7 @@ clases = inits.clasesInit()
 inits.matriculasInit(estudiantes, clases)
 times['init'] = time.time()
 
-# Limpieza de información
+# Limpieza de información y arrived clases
 clases = [x for x in clases if x.numberOfStudents > 0 and x.room != 0]
 arrived_clases = inits.arrivedClasesInit(estudiantes)
 arrived_clases = [x for x in arrived_clases if x.numberOfStudents > 0 and x.room != 0]
