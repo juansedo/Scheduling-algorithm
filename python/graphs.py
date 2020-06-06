@@ -1,3 +1,4 @@
+from inits import Arrival
 import inits
 
 def analizeSubDistances(clase, distancias, assigneds):
@@ -8,9 +9,9 @@ def analizeSubDistances(clase, distancias, assigneds):
         if bloque == 28 or bloque == 31:
             continue
         distancia = 0
-        for arrival in assigneds:
-            if arrival[0].block() != 0 and arrival[0].block() != 28 and arrival[0].block() != 31 and arrival[0].block() != 21:
-                distancia += arrival[1] * distancias[int(bloque)][arrival[0].block()]
+        for assigned in assigneds:
+            if assigned.clase.block() != 0 and assigned.clase.block() != 28 and assigned.clase.block() != 31 and assigned.clase.block() != 21:
+                distancia += assigned.amount * distancias[int(bloque)][assigned.clase.block()]
             else:
                 distancia = -1
                 break
@@ -42,20 +43,25 @@ def tti(hora): #Time to int
 
 def getAssigneds(claseSimple, receptor):
     assigned = []
-    for clase in claseSimple.arrivals.values():
-        if clase[0].room != 0:
-            assigned.append(clase)
-    if claseSimple.room != 0:
-        assigned.append([claseSimple, receptor[1]])
+    for arrival in claseSimple.arrivals.values():
+        if arrival != receptor:
+            assigned.append(arrival)
+    assigned.append(Arrival(claseSimple, receptor.amount))
     return assigned
 
 def AssignBestRoom(clase, aulas, distancias, conexiones):
-    if clase.room != 0:
+    if clase.room == 0:
         return
     bests = analizeSubDistances(clase, distancias, conexiones)
     for bloque in bests:
+        if bloque == clase.block():
+            return
         for aula in aulas[bloque].values():
             if checkAvailability(clase, aula):
+                if clase.room == 14204:
+                    return
+                if (clase.start_time+"-"+clase.end_time) in aulas[clase.block()][clase.room].availability[clase.day]:
+                    aulas[clase.block()][clase.room].availability[clase.day].remove(clase.start_time+"-"+clase.end_time)
                 aula.availability[clase.day].append(clase.start_time+"-"+clase.end_time)
                 clase.room = aula.id
                 return
@@ -63,14 +69,20 @@ def AssignBestRoom(clase, aulas, distancias, conexiones):
 
 
 def AssignRooms(claseSimple, distancias, aulas):
-    for clase in claseSimple.arrivals.values():
-        if clase[0].room != 0:
-            continue
-        if len(clase[0].arrivals) == 0:
-            AssignBestRoom(clase[0], aulas, distancias, getAssigneds(claseSimple, clase))
+    for arrival in claseSimple.arrivals.values():
+        if len(arrival.clase.arrivals) == 0:
+            AssignBestRoom(arrival.clase, aulas, distancias, getAssigneds(claseSimple, arrival))
         else:
-            AssignRooms(clase[0], distancias, aulas)
-            AssignBestRoom(clase[0], aulas, distancias, getAssigneds(claseSimple, clase) + list(clase[0].arrivals.values()))
+            AssignRooms(arrival.clase, distancias, aulas)
+            AssignBestRoom(arrival.clase, aulas, distancias, getAssigneds(claseSimple, arrival) + list(arrival.clase.arrivals.values()))
 
-    if claseSimple.room == 0:
-        AssignBestRoom(claseSimple, aulas, distancias, claseSimple.arrivals.values())
+    AssignBestRoom(claseSimple, aulas, distancias, claseSimple.arrivals.values())
+
+def calcDistances(clases, distancias):
+    distancia = 0
+    for clase in clases:
+        for arrival in clase.arrivals.values():
+            if clase.block() == 0 or arrival.clase.block() == 0 or clase.block() == 28 or arrival.clase.block() == 28:
+                continue
+            distancia += arrival.amount * distancias[clase.block()][arrival.clase.block()]
+    return distancia

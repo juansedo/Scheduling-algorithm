@@ -26,20 +26,11 @@ class Clase:
 
   def addArrival(self, clase):
     if self.arrivals.get(clase.id) is None:
-      self.arrivals[clase.id] = [clase, 0]
-    self.arrivals[clase.id][1]+= 1
+      self.arrivals[clase.id] = Arrival(clase, 0)
+    self.arrivals[clase.id].amount += 1
 
   def __repr__(self):
     return f'<%s.%s.%s>' % (self.code, self.group, self.day)
-
-class Arrival:
-  def __init__(self, clase, block, amount):
-    self.id = clase
-    self.block = block
-    self.amount = amount
-
-  def __repr__(self):
-    return f'(id:%s, b:%s, t:%s)' % (self.id, self.block, self.amount)
 
 def clasesInit(aulas):
   path = Path(__file__).parent / "pa20192.csv"
@@ -152,3 +143,22 @@ def initAvailabilities(clases, aulas):
         block = clasex.block()
         if aulas.get(block) is not None and aulas[block].get(clasex.room) is not None:
             aulas[block][clasex.room].availability[clasex.day].append(clasex.start_time+"-"+clasex.end_time)
+
+class Arrival:
+  """
+    Representa una clase del conjunto arrival. Permite saber cuántos estudiantes
+    vienen por cada clase
+
+    Atributos
+    ----------
+    clase : Clase
+      Representa una clase
+    amount : int
+      Cantidad de estudiantes que vienen de esa clase
+  """
+  def __init__(self, clase, amount):
+    self.clase = clase
+    self.amount = amount
+
+  def _repr_(self):
+    return f'(id:%s, t:%s)' % (self.clase._repr_(), self.amount)

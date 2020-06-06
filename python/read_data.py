@@ -27,21 +27,27 @@ with open(path, encoding="utf8") as csv_file:
         reg +=len(map_of_clases[id_clase])
     line_count += 1
   print(f'mat20192 file: Processed {line_count} lines ({reg} registered).')
-  clases = [x for x in clases if x.numberOfStudents > 0]
-  clases.sort(key = lambda x: x.code)
-
-
-
+  for clase in clases:
+      try:
+          a = aulas[clases.bloque()][clases.room]
+      except:
+          clases.remove(clase)
+clases = [x for x in clases if x.numberOfStudents > 0 and x.room != 0]
 clases_simples = inits.clasesSimplesInit(estudiantes)
+clases_simples = [x for x in clases_simples if x.numberOfStudents > 0 and x.room != 0]
+
+for clase in clases_simples:
+    print(clase.room)
+
+print("old distance= " + str(graphs.calcDistances(clases_simples, distancias)))
 inits.initAvailabilities(clases, aulas)
 clases_simples.sort(key=lambda x: (int(x.impairment), x.numberOfStudents))
-
 
 for clase in clases_simples:
     graphs.AssignRooms(clase, distancias, aulas)
 
-for clase in clases:
-    graphs.AssignBestRoom(clase, aulas, distancias, [])
+for clase in clases_simples:
     print(clase.room)
 
+print("new distance= " + str(graphs.calcDistances(clases_simples, distancias)))
 print("--- %s seconds ---" % (time.time() - start_time))
