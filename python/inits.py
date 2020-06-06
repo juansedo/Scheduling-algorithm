@@ -79,7 +79,9 @@ class Clase:
     return self.start_time + "-" + self.end_time
   
   def __repr__(self):
-    return f'<%s.%s.%s>' % (self.code, self.group, self.day)
+    def formatNumber(num):
+      return "0" + str(num) if int(num) < 10 else num
+    return f'<%s:%s.%s.%s>' % (formatNumber(self.numberOfStudents), self.code, self.group, self.day)
 
 
 class Arrival:
