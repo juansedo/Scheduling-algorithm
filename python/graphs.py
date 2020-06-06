@@ -6,7 +6,7 @@ def analizeSubDistances(clase, distancias, assigneds):
     return distancias.keys()
   distancias_totales = []
   for bloque in distancias.keys():
-    if bloque == 28 or bloque == 31:
+    if bloque in [0, 21, 28, 31]: #[0, 7, 13, 14, 15, 16, 17, 18, 19, 21, 23, 26, 27, 28, 29, 30, 31, 33, 34, 35, 38]:
       continue
     distancia = 0
     for assigned in assigneds:
@@ -26,6 +26,15 @@ def analizeSubDistances(clase, distancias, assigneds):
           distancias_totales.append( (bloque, distancia))
   return [x[0] for x in distancias_totales]
 
+def analizeBestDistances(arrivals, distancias):
+  distancias_totales = []
+  for bloque in distancias.keys():
+    if bloque in [0, 21, 28, 31]:
+      continue
+    distancia = sum([arv.amount * distancias[int(bloque)][arv.clase.getBlock()] for arv in arrivals if arv.clase.getBlock() != -1])
+    distancias_totales.append((bloque, distancia))
+  return dict(sorted(distancias_totales, key=lambda elem: elem[1])).keys()
+
 def checkAvailability(clase, room):
     available = ((not clase.impairment) or room.access) and clase.numberOfStudents <= int(room.capacity)
     if not available:
@@ -38,19 +47,11 @@ def checkAvailability(clase, room):
     return available
 
 def tti(hora): #Time to int
-    return int("".join(hora.split(":")))
-
-
-def getAssigneds(claseSimple, receptor):
-  assigned = []
-  for arrival in claseSimple.arrivals.values():
-    if arrival != receptor:
-      assigned.append(arrival)
-  assigned.append(Arrival(claseSimple, receptor.amount))
-  return assigned
+  return int("".join(hora.split(":")))
 
 def AssignBestRoom(clase, aulas, distancias, conexiones):
-  bests = analizeSubDistances(clase, distancias, conexiones)
+  #bests = analizeSubDistances(clase, distancias, conexiones)
+  bests = analizeBestDistances(clase.arrivals.values(), distancias)
   for bloque in bests:
     if bloque == clase.getBlock():
       return
@@ -65,14 +66,24 @@ def AssignBestRoom(clase, aulas, distancias, conexiones):
         return
   print("estamos es pero en la olla manito")
 
-def AssignRooms(claseSimple, distancias, aulas):
-  for arrival in claseSimple.arrivals.values():
+def AssignRooms(arrivedClase, distancias, aulas):
+  for arrival in arrivedClase.arrivals.values():
     if len(arrival.clase.arrivals) == 0:
-      AssignBestRoom(arrival.clase, aulas, distancias, getAssigneds(claseSimple, arrival))
+      AssignBestRoom(arrival.clase, aulas, distancias, getAssigneds(arrivedClase, arrival))
     else:
       AssignRooms(arrival.clase, distancias, aulas)
-      AssignBestRoom(arrival.clase, aulas, distancias, getAssigneds(claseSimple, arrival) + list(arrival.clase.arrivals.values()))
-  AssignBestRoom(claseSimple, aulas, distancias, claseSimple.arrivals.values())
+      AssignBestRoom(arrival.clase, aulas, distancias, getAssigneds(arrivedClase, arrival) + list(arrival.clase.arrivals.values()))
+  AssignBestRoom(arrivedClase, aulas, distancias, arrivedClase.arrivals.values())
+
+"""
+getAssigneds()
+  Enlista los salones ya asignados, que son arrivals de la arrivedClase
+  distintos al receptor y agrega a la misma clase con el total de receptor
+"""
+def getAssigneds(claseSimple, receptor):
+  assigned = [arv for arv in claseSimple.arrivals.values() if arv != receptor]
+  assigned.append(Arrival(claseSimple, receptor.amount))
+  return assigned
 
 """
 calcDistances()
@@ -93,7 +104,7 @@ print_comparison()
 def print_comparison(distancias, old, new):
   print("Before...\t\t\t\tNow...")
   for k in new.keys():
-    print(old[k],":", old[k].room,end='\t\t\t')
-    print(new[k],":", new[k].room)
+    print(old[k],":", old[k].room,"(",old[k].getSchedule(),")",end='\t\t\t')
+    print(new[k],":", new[k].room,"(",new[k].getSchedule(),")")
   print("TOTAL DISTANCE :", str(calcDistances(old.values(), distancias)), end='\t\t\t')
   print("TOTAL DISTANCE :", str(calcDistances(new.values(), distancias)))
