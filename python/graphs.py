@@ -88,7 +88,12 @@ getAssigneds()
   distintos al receptor y agrega a la misma clase con el total de receptor
 """
 def getAssigneds(claseSimple, receptor):
-  assigned = [arv for arv in claseSimple.arrivals.values() if arv != receptor]
+  assigned = []
+  for arv in claseSimple.arrivals.values():
+      if arv != receptor:
+          assigned.append(arv)
+      else:
+          break
   assigned.append(Arrival(claseSimple, receptor.amount))
   return assigned
 
