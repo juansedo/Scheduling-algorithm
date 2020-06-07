@@ -54,10 +54,9 @@ def AssignBestRoom(clase, aulas, distancias, conexiones):
 def AssignRooms(arrivedClase, distancias, aulas):
   for arrival in arrivedClase.arrivals.values():
     if len(arrival.clase.arrivals) == 0:
-      AssignBestRoom(arrival.clase, aulas, distancias, getAssigneds(arrivedClase, arrival))
+      AssignBestRoom(arrival.clase, aulas, distancias, [Arrival(arrivedClase, arrival.amount)])
     else:
-      AssignRooms(arrival.clase, distancias, aulas)
-      AssignBestRoom(arrival.clase, aulas, distancias, getAssigneds(arrivedClase, arrival) + list(arrival.clase.arrivals.values()))
+      AssignBestRoom(arrival.clase, aulas, distancias, [Arrival(arrivedClase, arrival.amount)] + list(arrival.clase.arrivals.values()))
   AssignBestRoom(arrivedClase, aulas, distancias, arrivedClase.arrivals.values())
 
 """
@@ -83,21 +82,6 @@ def checkTimeCollision(time1, time2):
   return (time2['end'] <= time1['start'] or time1['end'] <= time2['start'])
 
 """
-getAssigneds()
-  Enlista los salones ya asignados, que son arrivals de la arrivedClase
-  distintos al receptor y agrega a la misma clase con el total de receptor
-"""
-def getAssigneds(claseSimple, receptor):
-  assigned = []
-  for arv in claseSimple.arrivals.values():
-      if arv != receptor:
-          assigned.append(arv)
-      else:
-          break
-  assigned.append(Arrival(claseSimple, receptor.amount))
-  return assigned
-
-"""
 calcDistances()
   Calcula la distancia total que se recorre en los desplazamientos entre clases
 """
@@ -116,13 +100,13 @@ print_comparison()
 def print_comparison(distancias, old, new):
   def formatNumber(num):
     return "0000" + str(num) if int(num) < 10 else "0" + str(num) if int(num) < 10000 else num
-  
+
   for k in new.keys():
     if old[k].visited:
       continue
     old[k].visited = True
     new[k].visited = True
-    
+
     print(old[k],":", formatNumber(old[k].room),"(",old[k].getSchedule(),")", end='\t')
     print(new[k],":", formatNumber(new[k].room),"(",new[k].getSchedule(),")", end='')
     ending = "\n" if old[k].room != 0 else "  <-***\n"
@@ -132,4 +116,3 @@ def print_comparison(distancias, old, new):
       old_arv = {arv.clase.__repr__(): arv.clase for arv in old[k].arrivals.values()}
       new_arv = {arv.clase.__repr__(): arv.clase for arv in new[k].arrivals.values()}
       print_comparison(distancias, old_arv, new_arv)
-

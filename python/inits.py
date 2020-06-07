@@ -27,7 +27,7 @@ class Clase:
       Cantidad de estudiantes que recibirá la clase
     arrivals : {str: Arrival}
       Conjunto con las clases que le llegan a esta clase. Es
-      decir, están inmediatamente antes de esta y tienen 
+      decir, están inmediatamente antes de esta y tienen
       estudiantes en común.
     visited : bool
       Permite, al momento de imprimir resultados, saber
@@ -36,7 +36,7 @@ class Clase:
     -------
     addArrival(clase)
       Añade una clase a la lista de arrivals
-    
+
     getBlock()
       Obtiene el bloque en el que se encuentra la clase
       actualmente. Si devuelve -1, significa que el bloque
@@ -68,7 +68,7 @@ class Clase:
     self.numberOfStudents = 0
     self.arrivals = {}
     self.visited = False
-  
+
   def addArrival(self, clase):
     if self.arrivals.get(clase.__repr__()) is None:
       self.arrivals[clase.__repr__()] = Arrival(clase, 0)
@@ -77,10 +77,10 @@ class Clase:
   def getBlock(self): # Permite enlistar los bloques inexistentes
     ret = self.room // 1000
     return ret if (ret) not in [0, 21, 28, 31] else -1
-  
+
   def getSchedule(self):
     return self.start_time + "-" + self.end_time
-  
+
   def __repr__(self):
     def formatNumber(num):
       return "0" + str(num) if int(num) < 10 else num
@@ -114,7 +114,7 @@ def clasesInit():
   path = Path(__file__).parent / "pa20192.csv"
   with open(path, encoding="utf8") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
-    clases = [Clase(row) for row in csv_reader]
+    clases = [Clase(row) for row in csv_reader if int(row[6]) != 0]
     line_count = len(clases)
     print(f'pa20192: Processed {line_count} lines.')
   return clases
@@ -151,7 +151,7 @@ class Aula:
     access : bool
       True si es accesible para discapacitados
     availability : {str:[str]}
-      Diccionario con la información de los 
+      Diccionario con la información de los
       horarios en los que no se encuentra disponible
       el salón
   """
@@ -289,7 +289,7 @@ mappingClases(clases)
   organiza clases de mismo código y grupo por CÓDIGO.GRUPO
   Así, si un estudiante se matriculó en ABC.10, en el
   diccionario se guardarán todas los días que tiene clases
-  con esa materia 
+  con esa materia
 """
 def mappingClases(clases):
   out = {}
