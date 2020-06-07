@@ -39,12 +39,11 @@ def AssignBestRoom(clase, aulas, distancias, conexiones):
   bests = analizeSubDistances(clase, distancias, conexiones)
   #bests = analizeBestDistances(clase.arrivals.values(), distancias)
   for bloque in bests:
-    if bloque == clase.getBlock():
+    # Para evitar asignaciones en el mismo bloque y expandirse por la universidad
+    if bloque == clase.getBlock() or clase.getBlock() == -1:
       return
     for aula in aulas[bloque].values():
       if checkAvailability(clase, aula):
-        if clase.getBlock() == -1:
-          return
         if (clase.getSchedule()) in aulas[clase.getBlock()][clase.room].availability[clase.day]:
           aulas[clase.getBlock()][clase.room].availability[clase.day].remove(clase.getSchedule())
         aula.availability[clase.day].append(clase.getSchedule())
@@ -111,10 +110,21 @@ print_comparison()
 """
 def print_comparison(distancias, old, new):
   def formatNumber(num):
-    return "0" + str(num) if int(num) < 10000 else num
-  print("BEFORE...\t\t\t\t\tNOW...")
+    return "0000" + str(num) if int(num) < 10 else "0" + str(num) if int(num) < 10000 else num
+  
   for k in new.keys():
-    print(old[k],":", formatNumber(old[k].room),"(",old[k].getSchedule(),")",end='\t')
-    print(new[k],":", formatNumber(new[k].room),"(",new[k].getSchedule(),")")
-  print("TOTAL DISTANCE :", str(calcDistances(old.values(), distancias)), end='\t\t\t\t')
-  print("TOTAL DISTANCE :", str(calcDistances(new.values(), distancias)))
+    if old[k].visited:
+      continue
+    old[k].visited = True
+    new[k].visited = True
+    
+    print(old[k],":", formatNumber(old[k].room),"(",old[k].getSchedule(),")", end='\t')
+    print(new[k],":", formatNumber(new[k].room),"(",new[k].getSchedule(),")", end='')
+    ending = "\n" if old[k].room != 0 else "  <-***\n"
+    print(end=ending)
+
+    if len(new[k].arrivals) > 0:
+      old_arv = {arv.clase.__repr__(): arv.clase for arv in old[k].arrivals.values()}
+      new_arv = {arv.clase.__repr__(): arv.clase for arv in new[k].arrivals.values()}
+      print_comparison(distancias, old_arv, new_arv)
+

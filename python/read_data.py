@@ -36,7 +36,10 @@ new_arrived_clases = {cl.__repr__(): cl for cl in copy.deepcopy(arrived_clases)}
 times['s_new'] = time.time()
 
 # Imprimiendo información
+print("BEFORE...\t\t\t\t\tNOW...")
 graphs.print_comparison(distancias, old_arrived_clases, new_arrived_clases)
+print("TOTAL DISTANCE :", str(graphs.calcDistances(old_arrived_clases.values(), distancias)), end='\t\t\t\t')
+print("TOTAL DISTANCE :", str(graphs.calcDistances(new_arrived_clases.values(), distancias)))
 
 times['s_new'] -= times['exec']
 times['exec'] -= times['s_old']

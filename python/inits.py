@@ -29,7 +29,9 @@ class Clase:
       Conjunto con las clases que le llegan a esta clase. Es
       decir, están inmediatamente antes de esta y tienen 
       estudiantes en común.
-
+    visited : bool
+      Permite, al momento de imprimir resultados, saber
+      si ya se mencionó una clase o no
     Métodos
     -------
     addArrival(clase)
@@ -65,6 +67,7 @@ class Clase:
     self.impairment = False
     self.numberOfStudents = 0
     self.arrivals = {}
+    self.visited = False
   
   def addArrival(self, clase):
     if self.arrivals.get(clase.__repr__()) is None:
