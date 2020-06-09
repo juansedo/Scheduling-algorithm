@@ -11,7 +11,7 @@ distancias = inits.distanciasInit()
 aulas = inits.aulasInit()
 estudiantes = inits.estudiantesInit()
 clases = inits.clasesInit()
-inits.matriculasInit(estudiantes, clases)
+inits.matriculasInit(estudiantes, clases, aulas)
 times['init'] = time.time()
 
 # Limpieza de información y arrived clases
@@ -48,5 +48,5 @@ times['clean'] -= times['init']
 times['init'] -= start_time
 print("\nTimes:")
 for t, v in times.items():
-  print(t,":\t",v,"s")
+    print(t,":\t",v,"s")
 print("TOTAL TIME:", sum(times.values()),"s")
