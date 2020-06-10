@@ -34,26 +34,30 @@ def analizeBestDistances(arrivals, distancias):
     return dict(sorted(distancias_totales, key=lambda elem: elem[1])).keys()
 
 def AssignBestRoom(clase, aulas, distancias, conexiones):
-    bests = analizeSubDistances(clase, distancias, conexiones)
-    #bests = analizeBestDistances(clase.arrivals.values(), distancias)
-    for bloque in bests:
-        # Para evitar asignaciones en el mismo bloque y expandirse por la universidad
-        if bloque == clase.getBlock() or clase.getBlock() == -1: return
-        for aula in aulas[bloque].values():
-            if checkAvailability(clase, aula):
-                if (clase.getSchedule()) in aulas[clase.getBlock()][clase.room].availability[clase.day]:
-                    aulas[clase.getBlock()][clase.room].availability[clase.day].remove(clase.getSchedule())
-                aula.availability[clase.day].append(clase.getSchedule())
-                clase.room = aula.id
-                return
-    print("estamos es pero en la olla manito")
+    try:
+        bests = analizeSubDistances(clase, distancias, conexiones)
+        #bests = analizeBestDistances(clase.arrivals.values(), distancias)
+        for bloque in bests:
+            # Para evitar asignaciones en el mismo bloque y expandirse por la universidad
+            if bloque == clase.getBlock() or clase.getBlock() == -1: return
+            for aula in aulas[bloque].values():
+                if checkAvailability(clase, aula):
+                    if (clase.getSchedule()) in aulas[clase.getBlock()][clase.room].availability[clase.day]:
+                        aulas[clase.getBlock()][clase.room].availability[clase.day].remove(clase.getSchedule())
+                    aula.availability[clase.day].append(clase.getSchedule())
+                    clase.room = aula.id
+                    return
+        print("estamos es pero en la olla manito")
+    except:
+        pass
 
 def AssignRooms(arrivedClase, distancias, aulas):
     for arrival in arrivedClase.arrivals.values():
         if len(arrival.clase.arrivals) == 0:
             AssignBestRoom(arrival.clase, aulas, distancias, [Arrival(arrivedClase, arrival.amount)])
         else:
-            AssignBestRoom(arrival.clase, aulas, distancias, [Arrival(arrivedClase, arrival.amount)] + list(arrival.clase.arrivals.values()))
+            AssignBestRoom(arrival.clase, aulas, distancias, [Arrival(arrivedClase, arrival.amount)])
+            AssignRooms(arrival.clase, distancias, aulas)
     AssignBestRoom(arrivedClase, aulas, distancias, arrivedClase.arrivals.values())
 
 """
