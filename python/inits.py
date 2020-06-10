@@ -58,7 +58,7 @@ class Clase:
         "domingo": 'D'
         }
         self.code = line[0]
-        self.group = line[1]
+        self.group = str(int(line[1]))
         self.teacher = line[2]
         self.day = switcher.get(line[3])
         self.start_time = line[4]
